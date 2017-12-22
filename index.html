@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Metal Soul</title>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="data/Data.js"></script>
+    <script src="data/MagicManager.js"></script>
+    <script src="data/ParticleManager.js"></script>
+    <script src="data/Config.js"></script>
+    <script src="data/Elements.js"></script>
+    <script src="data/Cards.js"></script>
+    <script src="data/Player.js"></script>
+	<script src="js/phaser.min.js"></script>
+	<script src="js/Boot.js"></script>
+	<script src="js/Preloader.js"></script>
+	<script src="js/MainMenu.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/myFramework.js"></script>
+    <script src="js/Splash.js"></script>
+    <script src="js/MainMenu.js"></script>
+    <script src="js/CharacterSelect.js"></script>
+    <script src="js/Map.js"></script>
+    <script src="data/Encounters.js"></script>
+    <script src="data/Global.js"></script>
+<!--    <script src="js/memory-stats.js"></script> -->
+    <link rel="stylesheet" href="assets/webfonts/stylesheet.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css" charset="utf-8" />
+</head>
+<body bgcolor="#E6E6FA">
+<script>
+    //script para monitorear memoria
+/*
+    // add the monitor into our page and update it on a rAF loop
+    var stats = new MemoryStats();
+    stats.domElement.style.position	= 'fixed';
+    stats.domElement.style.right		= '0px';
+    stats.domElement.style.bottom		= '0px';
+    document.body.appendChild( stats.domElement );
+
+    requestAnimationFrame(function rAFloop(){
+        stats.update();
+        requestAnimationFrame(rAFloop);
+    });
+*/
+</script>
+<div id="gameContainer"></div>
+<div id="orientation"></div>
+
+<script type="text/javascript">
+
+window.onload = function() {
+    window.player = null;
+    window.encounters = null;
+
+	var game = new Phaser.Game(config.game_width, config.game_height, Phaser.CANVAS, 'gameContainer');
+
+    game.SoundManager1 = {
+        sfx: {},
+        music: {},
+        musicMuted: false,
+        sfxMuted: false,
+        context: null,
+        playSfx: function(key){
+            if(!this.sfxMuted) {
+                this.sfx[key].context = this.context;
+                this.sfx[key].play();
+            }
+        },
+        playMusic: function(key, loop){
+            this.stopAllMusic();
+            if(!this.musicMuted) {
+                this.music[key].context = this.context;
+                this.music[key].loop = loop;
+                this.music[key].play();
+            }
+        },
+        stopAllMusic: function(){
+            for(var key in this.music) {
+                this.music[key].stop();
+            }
+        },
+        addSfx: function(sound){
+            this.sfx[sound.name] = sound;
+            if (!this.context) this.context = sound.context;
+        },
+        addMusic: function(music){
+            this.music[music.name] = music;
+            if (!this.context) this.context = music.context;
+        },
+        toggleSfxMuted: function(){
+            this.sfxMuted = !this.sfxMuted;
+            return this.sfxMuted;
+        },
+        toggleMusicMuted: function(){
+            this.musicMuted = !this.musicMuted;
+
+            var volume = this.musicMuted ? 0 : 1;
+
+            for(var key in this.music) {
+                this.music[key].volume = volume;
+            }
+
+            return this.musicMuted;
+        }
+    };
+
+	game.state.add('Boot', BasicGame.Boot);
+	game.state.add('Preloader', BasicGame.Preloader);
+	game.state.add('MainMenu', BasicGame.MainMenu);
+    game.state.add('Game', BasicGame.Game);
+    game.state.add('Splash', BasicGame.Splash);
+    game.state.add('MainMenu', BasicGame.MainMenu);
+    game.state.add('CharacterSelect', BasicGame.CharacterSelect);
+    game.state.add('Map', BasicGame.Map);
+
+    //	Now start the Boot state.
+	game.state.start('Boot');
+
+    game.loadGame = function(index){
+        var cookieData = window.localStorage.getItem(COOKIE_NAME + index);
+
+        if(!cookieData){
+            window.player = JSON.parse(JSON.stringify(playerInit));
+            window.encounters = JSON.parse(JSON.stringify(encountersInit));
+        }
+        else {
+            var data = $.parseJSON(cookieData);
+            window.encounters = data.encounters;
+            window.player = data.player;
+        }
+        player.getExperienceToLevel = playerInit.getExperienceToLevel;
+    }
+
+    game.saveGame = function(){
+        var data = {};
+        data.encounters = encounters;
+        data.player = player;
+
+        var cookieData = JSON.stringify(data);
+
+        window.localStorage.setItem(COOKIE_NAME + game.slot, cookieData);
+    }
+
+    game.transition = function(action, callback) {
+        var self = this;
+
+        var FRAMERATE = 8;
+
+        var door = new Phaser.Sprite(self, 0, 0, 'door');
+        var door2 = new Phaser.Sprite(self, self.width, 0, 'door');
+        door2.scale.x = -1;
+        door.x -= door.width/2;
+        door2.x += door2.width/2;
+        door2.anchor.set(1, 0);
+        if (action == "close") {
+            self.input.disabled = true;
+            door.animations.add('anim', [0, 1, 2, 3, 4, 5], FRAMERATE, false);
+            door2.animations.add('anim', [0, 1, 2, 3, 4, 5], FRAMERATE, false);
+            door.animations.getAnimation('anim').onComplete.add(callback);
+        }
+        else {
+            self.input.disabled = false;
+            door.animations.add('anim', [6, 7, 8, 9, 10, 11], FRAMERATE, false);
+            door2.animations.add('anim', [6, 7, 8, 9, 10, 11], FRAMERATE, false);
+        }
+
+        this.world.add(door);
+        this.world.add(door2);
+        door.animations.play('anim', null, false, action != "close");
+        door2.animations.play('anim', null, false, action != "close");
+    }
+
+};
+
+</script>
+
+</body>
+</html>

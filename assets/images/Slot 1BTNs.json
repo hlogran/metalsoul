@@ -1,0 +1,35 @@
+{"frames": [
+
+{
+	"filename": "Blue BTN Slot 10000",
+	"frame": {"x":2,"y":2,"w":226,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":226,"h":50},
+	"sourceSize": {"w":226,"h":50}
+},
+{
+	"filename": "Blue BTN Slot 10001",
+	"frame": {"x":2,"y":54,"w":226,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":226,"h":50},
+	"sourceSize": {"w":226,"h":50}
+},
+{
+	"filename": "Blue BTN Slot 10002",
+	"frame": {"x":2,"y":106,"w":226,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":226,"h":50},
+	"sourceSize": {"w":226,"h":50}
+}],
+"meta": {
+	"app": "Adobe Flash CS6",
+	"version": "12.0.0.481",
+	"image": "Slot 1BTNs.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":256},
+	"scale": "1"
+}
+}

@@ -1,0 +1,35 @@
+{"frames": [
+
+{
+	"filename": "Orange BTN Main0000",
+	"frame": {"x":2,"y":2,"w":269,"h":59},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":269,"h":59},
+	"sourceSize": {"w":269,"h":59}
+},
+{
+	"filename": "Orange BTN Main0001",
+	"frame": {"x":2,"y":63,"w":269,"h":59},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":269,"h":59},
+	"sourceSize": {"w":269,"h":59}
+},
+{
+	"filename": "Orange BTN Main0002",
+	"frame": {"x":2,"y":124,"w":269,"h":59},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":269,"h":59},
+	"sourceSize": {"w":269,"h":59}
+}],
+"meta": {
+	"app": "Adobe Flash CS6",
+	"version": "12.0.0.481",
+	"image": "Orange BTN Main.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":256},
+	"scale": "1"
+}
+}
